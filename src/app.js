@@ -3,10 +3,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
   var btns = doc.querySelectorAll('.btn')
   var steps = [Math.floor(Math.random() * 4)]
   var userSteps = []
-
+  btns[steps[0]].style.animationName = 'flash'
+  console.log(steps)
   btns.forEach(v => {
     v.addEventListener('click', function (e) {
-      userSteps.push(Number(this.innerText))
+      console.log(this.getAttribute('data-value'))
+      userSteps.push(Number(this.getAttribute('data-value')))
 
       for (let i = 0; i < steps.length; i++) {
         if (steps[i] !== userSteps[i]) {
@@ -14,10 +16,11 @@ document.addEventListener('DOMContentLoaded', function (e) {
           userSteps = []
           steps = []
         }
-        console.log(steps, userSteps)
       }
 
-      steps.push(Math.floor(Math.random() * 4 + 1))
+      steps.push(Math.floor(Math.random() * 4))
+      btns[steps[steps.length - 1]].style.animationName = 'flash'
+      console.log(steps)
     })
   })
 })

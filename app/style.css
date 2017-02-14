@@ -1,0 +1,9 @@
+@keyframes flash {
+  form {color: black;}
+  to {color: red;}
+}
+
+button {
+  color: black;
+  animation-duration: 2s;
+}

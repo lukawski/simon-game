@@ -1,0 +1,27 @@
+{
+  "name": "simon-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "browser-sync start --server --files \"app, *html\"",
+    "babel": "babel src -w -d app",
+    "start": "npm run babel & npm run server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukawski/simon-game.git"
+  },
+  "author": "Kacper Łukawski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lukawski/simon-game/issues"
+  },
+  "homepage": "https://github.com/lukawski/simon-game#readme",
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "browser-sync": "^2.18.6"
+  }
+}

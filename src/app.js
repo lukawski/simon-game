@@ -14,20 +14,6 @@ class Game {
     }
 
     this.start = function () {
-      if (_mode === 'strict') {
-        startStrictGame()
-      } else {
-        startNormalGame()
-      }
-    }
-
-    this.restart = function () {
-      _steps = [Math.floor(Math.random() * 4)]
-      _userStep = 4
-    }
-
-    // Private methods
-    function startNormalGame () {
       playSequence()
       var stepsCounter = 0
       var currentStep = 0
@@ -35,38 +21,10 @@ class Game {
       _btns.forEach(v => {
         v.addEventListener('click', function (e) {
           _userStep = Number(this.getAttribute('data-value'))
-          if (_userStep !== _steps[currentStep]) {
+          if (_userStep !== _steps[currentStep] && _mode === 'normal') {
             _userStep = 4
             playSequence()
-          } else {
-            if (currentStep === stepsCounter) {
-              if (stepsCounter === _maxStepCount) {
-                console.log('You won!')
-                restartGame()
-                return 0
-              }
-              currentStep = 0
-              _steps.push(Math.floor(Math.random() * 4))
-              playSequence()
-              stepsCounter++
-            } else {
-              currentStep++
-            }
-          }
-        })
-      })
-    }
-
-    function startStrictGame () {
-      playSequence()
-      var stepsCounter = 0
-      var currentStep = 0
-
-      _btns.forEach(v => {
-        v.addEventListener('click', function (e) {
-          console.log(this.getAttribute('data-value'))
-          _userStep = Number(this.getAttribute('data-value'))
-          if (_userStep !== _steps[currentStep]) {
+          } else if (_userStep !== _steps[currentStep] && _mode === 'strict') {
             restartGame()
             playSequence()
           } else {
@@ -88,6 +46,12 @@ class Game {
       })
     }
 
+    this.restart = function () {
+      _steps = [Math.floor(Math.random() * 4)]
+      _userStep = 4
+    }
+
+    // Private methods
     function playSequence () {
       var i = 0
       console.log(_steps)

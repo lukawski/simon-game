@@ -6,6 +6,7 @@ class Game {
     var _steps = [Math.floor(Math.random() * 4)]
     var _userStep = 4
     var _btns = doc.querySelectorAll('.btn')
+    var _maxStepCount = 3
 
     // Public methods
     this.setMode = function (mode) {
@@ -13,32 +14,43 @@ class Game {
     }
 
     this.start = function () {
-      if (_mode === 'strict')
+      if (_mode === 'strict') {
         startStrictGame()
-      else
+      } else {
         startNormalGame()
+      }
     }
 
     this.restart = function () {
-
+      _steps = [Math.floor(Math.random() * 4)]
+      _userStep = 4
     }
 
     // Private methods
     function startNormalGame () {
       playSequence()
       var stepsCounter = 0
+      var currentStep = 0
       _btns.forEach(v => {
         v.addEventListener('click', function (e) {
           _userStep = Number(this.getAttribute('data-value'))
-          console.log(_userStep, stepsCounter, _steps)
-          if (_userStep !== _steps[stepsCounter]) {
+          if (_userStep !== _steps[currentStep]) {
             _userStep = 4
-            console.log('wrong')
             playSequence()
           } else {
-            _steps.push(Math.floor(Math.random() * 4))
-            playSequence()
-            stepsCounter++
+            if (currentStep === stepsCounter) {
+              if (stepsCounter === _maxStepCount) {
+                console.log('You won!')
+                stopGame()
+                return 0
+              }
+              currentStep = 0
+              _steps.push(Math.floor(Math.random() * 4))
+              playSequence()
+              stepsCounter++
+            } else {
+              currentStep++
+            }
           }
         })
       })
@@ -48,18 +60,7 @@ class Game {
       _btns.forEach(v => {
         v.addEventListener('click', function (e) {
           console.log(this.getAttribute('data-value'))
-          _userSteps.push(Number(this.getAttribute('data-value')))
-
-          for (let i = 0; i < _steps.length; i++) {
-            if (_steps[i] !== _userSteps[i]) {
-              _userSteps = []
-              _steps = []
-            }
-          }
-
-          _steps.push(Math.floor(Math.random() * 4))
-          _btns[_steps[_steps.length - 1]].style.animationName = 'flash'
-          console.log(_steps)
+          _userStep = Number(this.getAttribute('data-value'))
         })
       })
     }
@@ -67,26 +68,35 @@ class Game {
     function playSequence () {
       var i = 0
       var interval = setInterval(() => {
-        if (i === _steps.length) {
-          clearInterval(interval)
-          removeAnimation()
-          return
-        }
         _btns[_steps[i]].style.animationName = 'flash'
         i++
-      }, 1000)
+        if (i === _steps.length) {
+          clearInterval(interval)
+        }
+      }, 2000)
+
+      removeAnimation()
     }
 
     function removeAnimation () {
+      var j = 0
       setTimeout(() => {
-        _btns.forEach(v => {
-          v.removeAttribute('style')
-        })
-      }, _steps.length * 500)
+        var interval = setInterval(() => {
+          _btns[_steps[j]].removeAttribute('style')
+          j++
+          if (j === _steps.length) {
+            clearInterval(interval)
+          }
+        }, 2000)
+      }, 1000)
+    }
+
+    function stopGame () {
+      _steps = [Math.floor(Math.random() * 4)]
+      _userStep = 4
     }
   }
 }
-
 
 document.addEventListener('DOMContentLoaded', function (e) {
   var game = new Game()

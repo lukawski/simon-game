@@ -2,7 +2,7 @@ class Game {
   constructor () {
     const doc = document
 
-    var _mode = 'normal'
+    var _mode = 'strict'
     var _steps = [Math.floor(Math.random() * 4)]
     var _userStep = 4
     var _btns = doc.querySelectorAll('.btn')
@@ -31,6 +31,7 @@ class Game {
       playSequence()
       var stepsCounter = 0
       var currentStep = 0
+
       _btns.forEach(v => {
         v.addEventListener('click', function (e) {
           _userStep = Number(this.getAttribute('data-value'))
@@ -41,7 +42,7 @@ class Game {
             if (currentStep === stepsCounter) {
               if (stepsCounter === _maxStepCount) {
                 console.log('You won!')
-                stopGame()
+                restartGame()
                 return 0
               }
               currentStep = 0
@@ -57,16 +58,39 @@ class Game {
     }
 
     function startStrictGame () {
+      playSequence()
+      var stepsCounter = 0
+      var currentStep = 0
+
       _btns.forEach(v => {
         v.addEventListener('click', function (e) {
           console.log(this.getAttribute('data-value'))
           _userStep = Number(this.getAttribute('data-value'))
+          if (_userStep !== _steps[currentStep]) {
+            restartGame()
+            playSequence()
+          } else {
+            if (currentStep === stepsCounter) {
+              if (stepsCounter === _maxStepCount) {
+                console.log('You won!')
+                restartGame()
+                return 0
+              }
+              currentStep = 0
+              _steps.push(Math.floor(Math.random() * 4))
+              playSequence()
+              stepsCounter++
+            } else {
+              currentStep++
+            }
+          }
         })
       })
     }
 
     function playSequence () {
       var i = 0
+      console.log(_steps)
       var interval = setInterval(() => {
         _btns[_steps[i]].style.animationName = 'flash'
         i++
@@ -91,7 +115,7 @@ class Game {
       }, 1000)
     }
 
-    function stopGame () {
+    function restartGame () {
       _steps = [Math.floor(Math.random() * 4)]
       _userStep = 4
     }

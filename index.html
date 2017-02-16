@@ -8,12 +8,24 @@
     <script src="app/app.js"></script>
   </head>
   <body>
-    <button class="btn" data-value="0">1</button>
-    <button class="btn" data-value="1">2</button>
-    <button class="btn" data-value="2">3</button>
-    <button class="btn" data-value="3">4</button>
-    <div id="elo">
-      
+    
+    <div class="background center">
+      <h1>SIMON GAME</h1>
+      <div id="points" class="points">0</div>
+      <div class="control">
+        <button class="button-round green" id="start">
+          START
+        </button>
+        <button class="button-round start" id="setMode">
+          STRICT
+        </button>
+      </div>
+    </div>
+    <div class="game center">
+      <div class="btn yellow" data-value="0"></div>
+      <div class="btn blue" data-value="1"></div>
+      <div class="btn red" data-value="2"></div>
+      <div class="btn green" data-value="3"></div>
     </div>
   </body>
 </html>

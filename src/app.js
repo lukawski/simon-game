@@ -2,61 +2,66 @@ class Game {
   constructor () {
     const doc = document
 
-    var _mode = 'strict'
+    var _mode = 'normal'
     var _steps = [Math.floor(Math.random() * 4)]
     var _userStep = 4
     var _btns = doc.querySelectorAll('.btn')
+    var _pointsBox = doc.getElementById('points')
     var _maxStepCount = 3
+    var _stepsCounter = 0
+    var _currentStep = 0
+    var _locked = false
+
 
     // Public methods
-    this.setMode = function (mode) {
-      _mode = mode
+    this.setMode = function () {
+      _mode = (_mode === 'normal') ? 'strict' : 'normal'
+      console.log(_mode)
+    }
+
+    this.getMode = function () {
+      return _mode
     }
 
     this.start = function () {
       playSequence()
-      var stepsCounter = 0
-      var currentStep = 0
 
       _btns.forEach(v => {
         v.addEventListener('click', function (e) {
+          if (_locked) return 0
           _userStep = Number(this.getAttribute('data-value'))
-          if (_userStep !== _steps[currentStep] && _mode === 'normal') {
+          if (_userStep !== _steps[_currentStep] && _mode === 'normal') {
             _userStep = 4
             playSequence()
-          } else if (_userStep !== _steps[currentStep] && _mode === 'strict') {
+          } else if (_userStep !== _steps[_currentStep] && _mode === 'strict') {
             restartGame()
             playSequence()
           } else {
-            if (currentStep === stepsCounter) {
-              if (stepsCounter === _maxStepCount) {
+            if (_currentStep === _stepsCounter) {
+              if (_stepsCounter === _maxStepCount) {
                 console.log('You won!')
                 restartGame()
                 return 0
               }
-              currentStep = 0
+              _currentStep = 0
               _steps.push(Math.floor(Math.random() * 4))
               playSequence()
-              stepsCounter++
+              _stepsCounter++
+              _pointsBox.innerText = _stepsCounter
             } else {
-              currentStep++
+              _currentStep++
             }
           }
         })
       })
     }
 
-    this.restart = function () {
-      _steps = [Math.floor(Math.random() * 4)]
-      _userStep = 4
-    }
-
     // Private methods
     function playSequence () {
+      _locked = true
       var i = 0
-      console.log(_steps)
       var interval = setInterval(() => {
-        _btns[_steps[i]].style.animationName = 'flash'
+        _btns[_steps[i]].classList.add('light')
         i++
         if (i === _steps.length) {
           clearInterval(interval)
@@ -70,10 +75,11 @@ class Game {
       var j = 0
       setTimeout(() => {
         var interval = setInterval(() => {
-          _btns[_steps[j]].removeAttribute('style')
+          _btns[_steps[j]].classList.remove('light')
           j++
           if (j === _steps.length) {
             clearInterval(interval)
+            _locked = false
           }
         }, 2000)
       }, 1000)
@@ -82,11 +88,25 @@ class Game {
     function restartGame () {
       _steps = [Math.floor(Math.random() * 4)]
       _userStep = 4
+      _pointsBox.innerText = 0
+      _stepsCounter = 0
+      _currentStep = 0
     }
   }
 }
 
 document.addEventListener('DOMContentLoaded', function (e) {
   var game = new Game()
-  game.start()
+  document.getElementById('start').addEventListener('click', function (e) {
+    game.start()
+  })
+
+  document.getElementById('setMode').addEventListener('click', function (e) {
+    game.setMode()
+    if (game.getMode() === 'strict') {
+      this.classList.add('active')
+    } else {
+      this.classList.remove('active')
+    }
+  })
 })

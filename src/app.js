@@ -7,7 +7,7 @@ class Game {
     var _userStep = 4
     var _btns = doc.querySelectorAll('.btn')
     var _pointsBox = doc.getElementById('points')
-    var _maxStepCount = 3
+    var _maxStepCount = 19
     var _stepsCounter = 0
     var _currentStep = 0
     var _locked = false
@@ -91,6 +91,14 @@ class Game {
       _pointsBox.innerText = 0
       _stepsCounter = 0
       _currentStep = 0
+    }
+
+    function notifyError () {
+
+    }
+
+    function notifyWin () {
+
     }
   }
 }
